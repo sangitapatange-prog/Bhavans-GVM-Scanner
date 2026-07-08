@@ -53,7 +53,7 @@ if img_file is not None:
                     # --- ADVANCED TIME & LATE MARK LOGIC ---
                     ist_time = timezone(timedelta(hours=5, minutes=30))
                     now = datetime.now(ist_time)
-                
+                    now_time = now.time()
                     
                     # TIMINGS: Test karne ke liye isko abhi ke time ke hisaab se change kar lena!
                     start_time = time(13, 15)  # Window Opens
