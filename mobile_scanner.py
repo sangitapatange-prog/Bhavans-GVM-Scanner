@@ -14,9 +14,9 @@ st.info("click on the camera button to scan the face:")
 
 # --- Google Sheets Connection Setup ---
 def connect_to_sheets():
-    # Naya aur sabse chota tareeqa 
+    # Direct URL se connection (Koi confusion nahi)
     client = gspread.service_account(filename='secret_key.json')
-    sheet = client.open('Bhavans_GVM_Attendance').sheet1
+    sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/16uwbOt1ossNRGKAdTUgFMBi756gkE5oYPglc34a6vVM/edit').sheet1
     return sheet
 
 img_file = st.camera_input("")
@@ -75,7 +75,8 @@ if img_file is not None:
                         try:
                             sheet = connect_to_sheets()
                             # Excel ki jagah ab direct Google Sheet mein row add hogi
-                            sheet.append_row([name, date_str, time_str, day_str, status])
+                            # USER_ENTERED lagane se Google ko lagega kisi insaan ne type kiya hai
+                sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
                             st.success("☁️ Data successfully saved to Google Sheets!")
                         except Exception as e:
                             st.error(f"❌ Cloud Error: {e}")
