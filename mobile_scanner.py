@@ -67,23 +67,21 @@ if img_file is not None:
                             status = "Late"
                             st.warning(f"⏰ FACE MATCHED: {name} (LATE MARK!)")
                             
-                        # --- CLOUD MEIN SAVE KARNA (Google Sheets) ---
-                        date_str = now.strftime("%Y-%m-%d")
-                        time_str = now.strftime("%H:%M:%S")
-                        day_str = now.strftime("%A")
-                        
-                        try:
-                            sheet = connect_to_sheets()
-                            # Excel ki jagah ab direct Google Sheet mein row add hogi
-                            # USER_ENTERED lagane se Google ko lagega kisi insaan ne type kiya hai
-                sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
-                            st.success("☁️ Data successfully saved to Google Sheets!")
-                        except Exception as e:
-                            st.error(f"❌ Cloud Error: {e}")
-                        
-                    else:
-                        st.error(f"🛑 Face Matched: {name}. attendance window is closed. Entry Not Saved!")
-                    
+                       # --- CLOUD MEIN SAVE KARNA (Google Sheets) ---
+                date_str = now.strftime("%Y-%m-%d")
+                time_str = now.strftime("%H:%M:%S")
+                day_str = now.strftime("%A")
+
+                try:
+                    sheet = connect_to_sheets()
+                    # USER_ENTERED lagane se Google ko lagega kisi insaan ne type kiya hai
+                    sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
+                    st.success("☁ Data successfully saved to Google Sheets! (Confirmed)")
+                except Exception as e:
+                    st.error(f"❌ Cloud Error: {e}")
+
+            else:
+                st.error(f"🔴 Face Matched: {name}. attendance window is closed. Entry Not Saved!")
                 else:
                     st.error("🛑 Unknown Face! Access Denied.")
                     
