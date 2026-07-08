@@ -96,11 +96,7 @@ if img_file is not None:
                         sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
                         st.success("☁ Data successfully saved to Google Sheets! (Confirmed)")
                     except Exception as e:
-                        import json
-                        with open('secret_key.json') as f:
-                            robot_email = json.load(f).get('client_email')
-                        st.error(f"❌ 404 ERROR: Google Sheet is Email ko block kar rahi hai ➔ {robot_email}")
-                        st.info("Bhai, is exact email ko yahan se copy kar aur Google Sheet mein 'Share' daba kar Editor bana de.")
+                        st.error(f"❌ ASLI ERROR: {e}")
                 else:
                     st.error(f"🔴 Face Matched: {name}. Attendance window is closed. Entry Not Saved!")
                     
