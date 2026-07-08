@@ -14,10 +14,8 @@ st.info("click on the camera button to scan the face:")
 
 # --- Google Sheets Connection Setup ---
 def connect_to_sheets():
-    scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name('secret_key.json', scope)
-    client = gspread.authorize(creds)
-    # Apni sheet ka exact naam yahan likha hai
+    # Naya aur sabse chota tareeqa 
+    client = gspread.service_account(filename='secret_key.json')
     sheet = client.open('Bhavans_GVM_Attendance').sheet1
     return sheet
 
