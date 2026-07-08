@@ -76,3 +76,6 @@ if img_file is not None:
                         st.error(f"🔴 Face Matched: {name}. Attendance window is closed. Entry Not Saved!")
                 else:
                     st.error("🔴 Unknown Face! Access Denied.")
+
+    expect Exception as e:
+        st.error(f"system Error  {e}")
