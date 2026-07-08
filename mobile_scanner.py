@@ -2,7 +2,7 @@ import streamlit as st
 import cv2
 import numpy as np
 from PIL import Image
-from datetime import datetime, time
+from datetime import datetime, time, timedelta, timezone
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import os
@@ -51,8 +51,9 @@ if img_file is not None:
                     name = names[id] if id < len(names) else f"Unknown ({id})"
                     
                     # --- ADVANCED TIME & LATE MARK LOGIC ---
-                    now = datetime.now()
-                    now_time = now.time()
+                    ist_time = timezone(timedelta(hours=5, minutes=30))
+                    now = datetime.now(ist_time)
+                
                     
                     # TIMINGS: Test karne ke liye isko abhi ke time ke hisaab se change kar lena!
                     start_time = time(13, 15)  # Window Opens
