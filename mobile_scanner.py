@@ -45,7 +45,7 @@ if img_file is not None:
             for (x, y, w, h) in faces:
                 id, confidence = recognizer.predict(gray[y:y+h, x:x+w])
 
-               if confidence < 65:
+                if confidence < 65:
                 name = names[id]
                 
                 # --- TIME CHECKING ---
