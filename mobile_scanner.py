@@ -58,7 +58,7 @@ if img_file is not None:
                     # TIMINGS: Test karne ke liye isko abhi ke time ke hisaab se change kar lena!
                     start_time = time(13, 15)  # Window Opens
                     late_time = time(13, 45)   # Late Mark Starts
-                    end_time = time(13, 55)    # Window Closes
+                    end_time = time(13, 59)    # Window Closes
                     
                     if start_time <= now_time <= end_time:
                         if now_time < late_time:
