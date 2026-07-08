@@ -57,33 +57,32 @@ if img_file is not None:
                     start_time = time(14, 7)  # Window Opens
                     late_time = time(14, 45)   # Late Mark Starts
                     end_time = time(14, 59)    # Window Closes
-                    
                     if start_time <= now_time <= end_time:
-                        if now_time < late_time:
-                            status = "Present"
-                            st.success(f"✅ FACE MATCHED: {name} (ON TIME!)")
-                            st.balloons()
-                        else:
-                            status = "Late"
-                            st.warning(f"⏰ FACE MATCHED: {name} (LATE MARK!)")
-                            
-                       # --- CLOUD MEIN SAVE KARNA (Google Sheets) ---
-                date_str = now.strftime("%Y-%m-%d")
-                time_str = now.strftime("%H:%M:%S")
-                day_str = now.strftime("%A")
+                    if now_time <= late_time:
+                        status = "Present"
+                        st.success(f"✅ FACE MATCHED: {name} (ON TIME!)")
+                        st.balloons()
+                    else:
+                        status = "Late"
+                        st.warning(f"⏰ FACE MATCHED: {name} (LATE MARK!)")
 
-                try:
-                    sheet = connect_to_sheets()
-                    # USER_ENTERED lagane se Google ko lagega kisi insaan ne type kiya hai
-                    sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
-                    st.success("☁ Data successfully saved to Google Sheets! (Confirmed)")
-                except Exception as e:
-                    st.error(f"❌ Cloud Error: {e}")
+                    # --- CLOUD MEIN SAVE KARNA (Google Sheets) ---
+                    date_str = now.strftime("%Y-%m-%d")
+                    time_str = now.strftime("%H:%M:%S")
+                    day_str = now.strftime("%A")
 
-            else:
-                st.error(f"🔴 Face Matched: {name}. attendance window is closed. Entry Not Saved!")
+                    try:
+                        sheet = connect_to_sheets()
+                        sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
+                        st.success("☁ Data successfully saved to Google Sheets! (Confirmed)")
+                    except Exception as e:
+                        st.error(f"❌ Cloud Error: {e}")
+
                 else:
-                    st.error("🛑 Unknown Face! Access Denied.")
+                    st.error(f"🔴 Face Matched: {name}. Attendance window is closed. Entry Not Saved!")
+                    
+            else:
+                st.error("🔴 Unknown Face! Access Denied.")
                     
     except Exception as e:
         st.error(f"System Error: {e}")
