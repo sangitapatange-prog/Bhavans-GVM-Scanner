@@ -28,11 +28,20 @@ if not os.path.exists(cascade_path):
 face_cascade = cv2.CascadeClassifier(cascade_path)
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
-try:
-    recognizer.read('trainer.yml')
-except:
-    st.error("Error: 'trainer.yml' not found. Please train the model first.")
 
+# Streamlit ko file ka exact rasta (GPS) batane ki ninja technique
+current_folder = os.path.dirname(os.path.abspath(__file__))
+trainer_file = os.path.join(current_folder, 'trainer.yml')
+
+if not os.path.exists(trainer_file):
+    st.error("❌ File GitHub par hai, par server usko dhoondh nahi pa raha!")
+    st.stop() # Yeh line aage ka crash (cv2.error) hamesha ke liye rok degi!
+else:
+    try:
+        recognizer.read(trainer_file)
+    except Exception as e:
+        st.error(f"❌ File mil gayi, par OpenCV usko padh nahi pa raha (File corrupt ho sakti hai): {e}")
+        st.stop()
 # Names array matching IDs (Zero se shuru)
 names = ['None', 'Yatharth', 'Papa', 'Milk man']
 
