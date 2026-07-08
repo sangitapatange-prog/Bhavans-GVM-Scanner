@@ -25,7 +25,11 @@ img_file = st.camera_input("")
 
 if img_file is not None:
     try:
-        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        face_cascade = cascade_path = 'haarcascade_frontalface_default.xml'
+        if not os.path.exists(cascade_path):
+            import urllib.request
+            urllib.request.urlretrieve('https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml', cascade_path)
+        face_cascade = cv2.CascadeClassifier(cascade_path)
         recognizer = cv2.face.LBPHFaceRecognizer_create()
         recognizer.read('trainer.yml')
 
