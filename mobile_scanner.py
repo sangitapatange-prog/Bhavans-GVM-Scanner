@@ -45,44 +45,36 @@ if img_file is not None:
             for (x, y, w, h) in faces:
                 id, confidence = recognizer.predict(gray[y:y+h, x:x+w])
 
-                if confidence < 65:
-                    name = names[id] if id < len(names) else f"Unknown ({id})"
-                    
-                    # --- ADVANCED TIME & LATE MARK LOGIC ---
-                    ist_time = timezone(timedelta(hours=5, minutes=30))
-                    now = datetime.now(ist_time)
-                    now_time = now.time()
-                    
-                    # TIMINGS: Test karne ke liye isko abhi ke time ke hisaab se change kar lena!
-                    start_time = time(14, 7)  # Window Opens
-                    late_time = time(14, 45)   # Late Mark Starts
-                    end_time = time(14, 59)    # Window Closes
-                    if start_time <= now_time <= end_time:
-                        if now_time <= late_time:
-                            status = "Present"
-                            st.success(f"✅ FACE MATCHED: {name} (ON TIME!)")
-                            st.balloons()
-                        else:
-                            status = "Late"
-                            st.warning(f"⏰ FACE MATCHED: {name} (LATE MARK!)")
-
-                        # --- CLOUD MEIN SAVE KARNA (Google Sheets) ---
-                        date_str = now.strftime("%Y-%m-%d")
-                        time_str = now.strftime("%H:%M:%S")
-                        day_str = now.strftime("%A")
-
-                        try:
-                            sheet = connect_to_sheets()
-                            sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
-                            st.success("☁ Data successfully saved to Google Sheets! (Confirmed)")
-                        except Exception as e:
-                            st.error(f"❌ Cloud Error: {e}")
-
+               if confidence < 65:
+                name = names[id]
+                
+                # --- TIME CHECKING ---
+                if start_time <= now_time <= end_time:
+                    if now_time <= late_time:
+                        status = "Present"
+                        st.success(f"✅ FACE MATCHED: {name} (ON TIME!)")
+                        st.balloons()
                     else:
-                        st.error(f"🔴 Face Matched: {name}. Attendance window is closed. Entry Not Saved!")
+                        status = "Late"
+                        st.warning(f"⏰ FACE MATCHED: {name} (LATE MARK!)")
+                        
+                    # --- CLOUD MEIN SAVE KARNA (Google Sheets) ---
+                    date_str = now.strftime("%Y-%m-%d")
+                    time_str = now.strftime("%H:%M:%S")
+                    day_str = now.strftime("%A")
                     
+                    try:
+                        client = gspread.service_account(filename='secret_key.json')
+                        # Direct Sheet ID (Brahmastra 2.0 - Yeh fail nahi hota)
+                        sheet = client.open_by_key('16uwbOt1ossNRGKAdTUgFMBi756gkE5oYPglc34a6vVM').sheet1
+                        
+                        sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
+                        st.success("☁ Data successfully saved to Google Sheets! (Confirmed)")
+                    except Exception as e:
+                        st.error(f"❌ Cloud Error: {e}")
+                else:
+                    st.error(f"🔴 Face Matched: {name}. Attendance window is closed. Entry Not Saved!")
             else:
                 st.error("🔴 Unknown Face! Access Denied.")
-                    
     except Exception as e:
         st.error(f"System Error: {e}")
