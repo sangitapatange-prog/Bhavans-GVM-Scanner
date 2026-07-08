@@ -10,7 +10,7 @@ import os
 st.set_page_config(page_title="Bhavan's GVM - Smart Scanner", page_icon="📸")
 
 st.markdown("<h2 style='text-align: center; color: #ff4b4b;'>Bhavan's GVM Web Scanner (Cloud)</h2>", unsafe_allow_html=True)
-st.info("Apna face scan karne ke liye niche camera icon par click karein:")
+st.info("click on the camera button to scan the face:")
 
 # --- Google Sheets Connection Setup ---
 def connect_to_sheets():
@@ -42,7 +42,7 @@ if img_file is not None:
         faces = face_cascade.detectMultiScale(gray, 1.2, 5)
 
         if len(faces) == 0:
-            st.error("❌ Face nahi dikha! Thoda paas aakar try karein.")
+            st.error("❌ please come closer! to scan the face.")
         else:
             for (x, y, w, h) in faces:
                 id, confidence = recognizer.predict(gray[y:y+h, x:x+w])
@@ -55,9 +55,9 @@ if img_file is not None:
                     now_time = now.time()
                     
                     # TIMINGS: Test karne ke liye isko abhi ke time ke hisaab se change kar lena!
-                    start_time = time(8, 15)  # Window Opens
-                    late_time = time(8, 45)   # Late Mark Starts
-                    end_time = time(8, 55)    # Window Closes
+                    start_time = time(13, 15)  # Window Opens
+                    late_time = time(13, 45)   # Late Mark Starts
+                    end_time = time(13, 55)    # Window Closes
                     
                     if start_time <= now_time <= end_time:
                         if now_time < late_time:
@@ -82,7 +82,7 @@ if img_file is not None:
                             st.error(f"❌ Cloud Error: {e}")
                         
                     else:
-                        st.error(f"🛑 Face Matched: {name}. Par attendance window band hai. Entry Not Saved!")
+                        st.error(f"🛑 Face Matched: {name}. attendance window is closed. Entry Not Saved!")
                     
                 else:
                     st.error("🛑 Unknown Face! Access Denied.")
