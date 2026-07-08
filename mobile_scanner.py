@@ -14,7 +14,7 @@ st.info("click on the camera button to scan the face:")
 
 # --- Google Sheets Connection Setup ---
 def connect_to_sheets():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_name('secret_key.json', scope)
     client = gspread.authorize(creds)
     # Apni sheet ka exact naam yahan likha hai
