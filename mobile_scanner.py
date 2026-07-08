@@ -70,7 +70,7 @@ if img_file is not None:
                         
                             sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
                             st.success("☁ Data successfully saved to Google Sheets! (Confirmed)")
-                         except Exception as e:
+                        except Exception as e:
                             st.error(f"❌ Cloud Error: {e}")
                     else:
                         st.error(f"🔴 Face Matched: {name}. Attendance window is closed. Entry Not Saved!")
