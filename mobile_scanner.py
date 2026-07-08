@@ -11,10 +11,14 @@ st.set_page_config(page_title="Bhavan's GVM - Smart Scanner", page_icon="📷")
 st.markdown("<h2 style='text-align: center; color: #ff4b4b;'>Bhavan's GVM Web Scanner (Cloud)</h2>", unsafe_allow_html=True)
 st.info("Click on the camera button to scan the face:")
 
-# --- Google Sheets Connection Setup ---
+# --- Google Sheets Connection Setup (Anti-Hack Mode) ---
 def connect_to_sheets():
-    client = gspread.service_account(filename='secret_key.json')
-    # '.get_worksheet(0)' ka matlab hai naam chahe jo ho, seedha pehle (0th) panne par likho!
+    import json
+    # Streamlit ki tijori se secret key nikal raha hai
+    creds_dict = json.loads(st.secrets["GOOGLE_KEY"])
+    client = gspread.service_account_from_dict(creds_dict)
+    
+    # Tera original URL
     sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/16uwbOt1ossNRGKAdTUgFMBI756gkE5oYPglc34a6vVM/edit?gid=0#gid=0').get_worksheet(0)
     return sheet
 
