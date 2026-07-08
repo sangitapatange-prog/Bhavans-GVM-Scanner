@@ -15,7 +15,7 @@ st.info("Click on the camera button to scan the face:")
 def connect_to_sheets():
     client = gspread.service_account(filename='secret_key.json')
     # '.get_worksheet(0)' ka matlab hai naam chahe jo ho, seedha pehle (0th) panne par likho!
-    sheet = client.open_by_key('16uwbOt1ossNRGKAdTUgFMBi756gkE5oYPglc34a6vVM').get_worksheet(0)
+    sheet = client.open_by_key('https://docs.google.com/spreadsheets/d/16uwbOt1ossNRGKAdTUgFMBI756gkE5oYPglc34a6vVM/edit?gid=0#gid=0').get_worksheet(0)
     return sheet
 
 # --- Face Recognition Setup ---
