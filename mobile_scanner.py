@@ -46,35 +46,33 @@ if img_file is not None:
                 id, confidence = recognizer.predict(gray[y:y+h, x:x+w])
 
                 if confidence < 65:
-                name = names[id]
+                    name = names[id]
                 
                 # --- TIME CHECKING ---
-                if start_time <= now_time <= end_time:
-                    if now_time <= late_time:
-                        status = "Present"
-                        st.success(f"✅ FACE MATCHED: {name} (ON TIME!)")
-                        st.balloons()
-                    else:
-                        status = "Late"
-                        st.warning(f"⏰ FACE MATCHED: {name} (LATE MARK!)")
+                    if start_time <= now_time <= end_time:
+                        if now_time <= late_time:
+                            status = "Present"
+                            st.success(f"✅ FACE MATCHED: {name} (ON TIME!)")
+                            st.balloons()
+                        else:
+                            status = "Late"
+                            st.warning(f"⏰ FACE MATCHED: {name} (LATE MARK!)")
                         
                     # --- CLOUD MEIN SAVE KARNA (Google Sheets) ---
-                    date_str = now.strftime("%Y-%m-%d")
-                    time_str = now.strftime("%H:%M:%S")
-                    day_str = now.strftime("%A")
+                        date_str = now.strftime("%Y-%m-%d")
+                        time_str = now.strftime("%H:%M:%S")
+                        day_str = now.strftime("%A")
                     
-                    try:
-                        client = gspread.service_account(filename='secret_key.json')
+                        try:
+                            client = gspread.service_account(filename='secret_key.json')
                         # Direct Sheet ID (Brahmastra 2.0 - Yeh fail nahi hota)
-                        sheet = client.open_by_key('16uwbOt1ossNRGKAdTUgFMBi756gkE5oYPglc34a6vVM').sheet1
+                            sheet = client.open_by_key('16uwbOt1ossNRGKAdTUgFMBi756gkE5oYPglc34a6vVM').sheet1
                         
-                        sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
-                        st.success("☁ Data successfully saved to Google Sheets! (Confirmed)")
-                    except Exception as e:
-                        st.error(f"❌ Cloud Error: {e}")
+                            sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
+                            st.success("☁ Data successfully saved to Google Sheets! (Confirmed)")
+                        except Exception as e:
+                            st.error(f"❌ Cloud Error: {e}")
+                    else:
+                        st.error(f"🔴 Face Matched: {name}. Attendance window is closed. Entry Not Saved!")
                 else:
-                    st.error(f"🔴 Face Matched: {name}. Attendance window is closed. Entry Not Saved!")
-            else:
-                st.error("🔴 Unknown Face! Access Denied.")
-    except Exception as e:
-        st.error(f"System Error: {e}")
+                    st.error("🔴 Unknown Face! Access Denied.")
