@@ -77,5 +77,5 @@ if img_file is not None:
                 else:
                     st.error("🔴 Unknown Face! Access Denied.")
 
-    expect Exception as e:
+    except Exception as e:
         st.error(f"system Error  {e}")
