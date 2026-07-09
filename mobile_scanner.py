@@ -59,7 +59,7 @@ def load_names():
     return names
 
 # Jab face match ho, toh naam list se aise uthana:
-  names_map = load_names()
+names_map = load_names()
   
 
 # --- Camera Input ---
