@@ -46,8 +46,21 @@ else:
     except Exception as e:
         st.error(f"❌ File mil gayi, par OpenCV usko padh nahi pa raha (File corrupt ho sakti hai): {e}")
         st.stop()
-# Names array matching IDs (Zero se shuru)
-names = ['None', 'Yatharth', 'Papa', 'Milk man']
+# --- NAAM PADHNE WALA FUNCTION ---
+def load_names():
+    names = {}
+    import os
+    if os.path.exists('names_mapping.txt'):
+        with open('names_mapping.txt', 'r') as f:
+            for line in f:
+                if ',' in line:
+                    id_str, name = line.strip().split(',')
+                    names[int(id_str)] = name
+    return names
+
+# Jab face match ho, toh naam list se aise uthana:
+# names_map = load_names()
+# name = names_map.get(user_id, "Unknown")
 
 # --- Camera Input ---
 img_file = st.camera_input("")
