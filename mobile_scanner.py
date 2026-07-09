@@ -59,8 +59,8 @@ def load_names():
     return names
 
 # Jab face match ho, toh naam list se aise uthana:
-# names_map = load_names()
-# name = names_map.get(user_id, "Unknown")
+  names_map = load_names()
+  
 
 # --- Camera Input ---
 img_file = st.camera_input("")
@@ -81,7 +81,7 @@ if img_file is not None:
 
             # Agar confidence 75 se kam hai matlab AI sure hai
             if confidence < 75: 
-                name = names[id]
+                name = names_map.get(id, "Unknown")
                 
                 # --- ADVANCED TIME & LATE MARK LOGIC ---
                 ist_time = timezone(timedelta(hours=5, minutes=30))
