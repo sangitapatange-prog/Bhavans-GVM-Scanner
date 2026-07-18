@@ -10,7 +10,12 @@ st.set_page_config(page_title="Bhavan's GVM - Admin Dashboard", page_icon="🏫"
 # ==========================================
 # 🔒 SECURITY SYSTEM (PIN AUTHENTICATION)
 # ==========================================
-ADMIN_PIN = "2026" # <-- YAHAN APNA SECRET PIN SET KAR
+try:
+    # Cloud par yeh Streamlit ki tijori se secret PIN lega
+    ADMIN_PIN = str(st.secrets["ADMIN_PIN"])
+except:
+    # Laptop par local testing ke liye dummy PIN (Kyunki local secrets file nahi hai)
+    ADMIN_PIN = "0000"
 
 # Session State variables for memory
 if 'authenticated' not in st.session_state:
