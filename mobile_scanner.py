@@ -89,9 +89,9 @@ if img_file is not None:
                 now_time = now.time()
                 
                 # TIMINGS: Aaj ka Test Time (3:00 PM to 5:00 PM)
-                start_time = time(22, 0)   # Window Opens
-                late_time = time(22, 30)   # Late Mark Starts
-                end_time = time(23, 0)     # Window Closes
+                start_time = time(14, 0)   # Window Opens
+                late_time = time(14, 30)   # Late Mark Starts
+                end_time = time(17, 0)     # Window Closes
 
                 if start_time <= now_time <= end_time:
                     if now_time <= late_time:
