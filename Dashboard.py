@@ -72,8 +72,8 @@ st.markdown("""
 with st.sidebar:
     st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=120) 
     st.markdown("## 🏛️ Administration")
-    st.markdown("**Director:** [DIRECTOR NAME]") 
-    st.markdown("**Principal:** [PRINCIPAL NAME]")
+    st.markdown("**Director:** [Shri.Ashish Kumar Sarkar]") 
+    st.markdown("**Principal:** [Smt.Dharati Tamgire]")
     
     st.markdown("<div class='developer-box'><p class='developer-text'>System Architect</p><p class='developer-name'>Yatharth Deshmukh</p><p class='developer-text'>Bhavan's GVM Alumnus</p></div>", unsafe_allow_html=True)
     
