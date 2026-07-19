@@ -26,8 +26,8 @@ if 'attempts' not in st.session_state:
 # --- LOGIN SCREEN ---
 if not st.session_state['authenticated']:
     st.markdown("<br><br><br>", unsafe_allow_html=True)
-    st.markdown("<h1 style='text-align: center; color: #4F46E5;'>🏫 Bhavan's GVM Hinganghat</h1>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: #9CA3AF;'>Smart Attendance System - Secure Login</h2>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #1D1D1F;'>🏫 Bhavan's GVM Hinganghat</h1>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #515154;'>Smart Attendance System - Secure Login</h2>", unsafe_allow_html=True)
     
     # 3-Strike Lockdown Logic
     if st.session_state['attempts'] >= 3:
@@ -38,7 +38,7 @@ if not st.session_state['authenticated']:
         
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-        st.markdown(f"<div style='text-align: center; color: #F87171;'>Attempts remaining: {3 - st.session_state['attempts']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center; color: #FF3B30; font-weight: bold;'>Attempts remaining: {3 - st.session_state['attempts']}</div>", unsafe_allow_html=True)
         pin_input = st.text_input("Enter Admin PIN", type="password")
         
         if st.button("Unlock Dashboard", use_container_width=True):
@@ -56,15 +56,79 @@ if not st.session_state['authenticated']:
 # 💻 MAIN DASHBOARD UI (Only visible if logged in)
 # ==========================================
 
-# --- Custom CSS for Premium Look ---
+# --- Custom CSS for Premium Look (APPLE/MAC STYLE) ---
 st.markdown("""
     <style>
-    .school-title { font-size: 38px; font-weight: 900; color: #F59E0B; text-align: center; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0px;}
-    .sub-title { font-size: 22px; color: #D1D5DB; text-align: center; margin-bottom: 30px; font-weight: 400;}
-    /* Developer Name tag with cool gradient */
-    .developer-box { background: linear-gradient(135deg, #4F46E5 0%, #9333EA 100%); padding: 20px; border-radius: 12px; text-align: center; color: white; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
-    .developer-text { font-size: 13px; margin: 0; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px;}
-    .developer-name { font-size: 24px; font-weight: 800; margin: 5px 0; color: #FFFFFF;}
+    /* Apple Light Grey Background */
+    [data-testid="stAppViewContainer"] {
+        background-color: #F5F5F7;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    /* Top Header Transparent */
+    [data-testid="stHeader"] {
+        background-color: transparent;
+    }
+    
+    /* Apple Style Blue Buttons with Hover Effect */
+    div.stButton > button {
+        background-color: #007AFF !important;
+        color: white !important;
+        border-radius: 12px !important;
+        border: none !important;
+        padding: 10px 24px !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 6px rgba(0, 122, 255, 0.2) !important;
+    }
+    div.stButton > button:hover {
+        transform: translateY(-2px) !important;
+        background-color: #0056b3 !important;
+        box-shadow: 0 6px 12px rgba(0, 122, 255, 0.3) !important;
+    }
+    
+    /* Glassmorphism & Soft Shadows for Inputs */
+    .stSelectbox div[data-baseweb="select"], .stTextInput div[data-baseweb="input"], .stDateInput div[data-baseweb="input"] {
+        border-radius: 10px !important;
+        border: 1px solid #E5E5EA !important;
+        background-color: #FFFFFF !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+    }
+    
+    /* Premium Dashboard Cards (For Metrics) */
+    [data-testid="metric-container"] {
+        background-color: #FFFFFF;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        border: 1px solid #E5E5EA;
+        text-align: center;
+    }
+    
+    /* Text Colors & Headings */
+    h1, h2, h3 {
+        color: #1D1D1F !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.5px !important;
+    }
+    p, span, label {
+        color: #515154 !important;
+    }
+    
+    /* Table Styling */
+    [data-testid="stTable"], [data-testid="stDataFrame"] {
+        background-color: #FFFFFF;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+
+    /* Existing Title and Developer Box */
+    .school-title { font-size: 38px; font-weight: 900; color: #1D1D1F; text-align: center; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0px;}
+    .sub-title { font-size: 22px; color: #515154; text-align: center; margin-bottom: 30px; font-weight: 400;}
+    .developer-box { background: linear-gradient(135deg, #007AFF 0%, #5AC8FA 100%); padding: 20px; border-radius: 16px; text-align: center; color: white; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,122,255,0.3);}
+    .developer-text { font-size: 13px; margin: 0; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; color: #FFFFFF !important;}
+    .developer-name { font-size: 24px; font-weight: 800; margin: 5px 0; color: #FFFFFF !important;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -111,12 +175,29 @@ df = load_data()
 if df.empty:
     st.info("📌 System is online and waiting for scans.")
 else:
-    # --- SMART FILTERS ---
-    st.markdown("### 🔍 Search & Filter")
-    
     name_col = df.columns[0]
     date_col = [c for c in df.columns if 'date' in str(c).lower()][0]
     status_col = [c for c in df.columns if 'status' in str(c).lower()][0]
+
+    # --- LIVE ANALYTICS COUNTERS (APPLE CARDS) ---
+    st.markdown("### 📊 Live Analytics")
+    metric_col1, metric_col2, metric_col3 = st.columns(3)
+    
+    with metric_col1:
+        st.metric(label="👥 Total Scans", value=len(df)) 
+        
+    with metric_col2:
+        present_count = len(df[df[status_col].astype(str).str.contains('Present|ON TIME', case=False, na=False)])
+        st.metric(label="✅ On Time", value=present_count)
+        
+    with metric_col3:
+        late_count = len(df[df[status_col].astype(str).str.contains('Late', case=False, na=False)])
+        st.metric(label="⏰ Late Marks", value=late_count)
+
+    st.markdown("---")
+
+    # --- SMART FILTERS ---
+    st.markdown("### 🔍 Search & Filter")
     
     f_col1, f_col2, f_col3 = st.columns(3)
     
@@ -137,7 +218,7 @@ else:
         filtered_df = filtered_df[filtered_df[date_col].astype(str).str.contains(str(selected_date))]
     if selected_status != "All":
         filtered_df = filtered_df[filtered_df[status_col].astype(str).str.contains(selected_status, case=False, na=False)]
-
+    
     st.markdown("---")
     
     # --- LIVE DATA TABLE ---
