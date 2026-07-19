@@ -8,16 +8,15 @@ import time
 st.set_page_config(page_title="Bhavan's GVM - Admin Dashboard", page_icon="🏫", layout="wide")
 
 # ==========================================
-# 🔒 SECURITY SYSTEM (PIN AUTHENTICATION)
+# 🔒 SECURITY SYSTEM (SMART PIN AUTHENTICATION)
 # ==========================================
 try:
     # Cloud par yeh Streamlit ki tijori se secret PIN lega
     ADMIN_PIN = str(st.secrets["ADMIN_PIN"])
 except:
-    # Laptop par local testing ke liye dummy PIN (Kyunki local secrets file nahi hai)
-    ADMIN_PIN = "0000"
+    # Laptop par local testing ke liye default PIN (Kyunki local secrets file nahi hai)
+    ADMIN_PIN = "0000" 
 
-# Session State variables for memory
 if 'authenticated' not in st.session_state:
     st.session_state['authenticated'] = False
 if 'attempts' not in st.session_state:
@@ -29,12 +28,11 @@ if not st.session_state['authenticated']:
     st.markdown("<h1 style='text-align: center; color: #4F46E5;'>🏫 Bhavan's GVM Hinganghat</h1>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; color: #9CA3AF;'>Smart Attendance System - Secure Login</h2>", unsafe_allow_html=True)
     
-    # 3-Strike Lockdown Logic
     if st.session_state['attempts'] >= 3:
         st.markdown("<br>", unsafe_allow_html=True)
         st.error("🚨 SYSTEM LOCKDOWN INITIATED 🚨")
         st.warning("Unauthorized Access Detected! 3 Failed Attempts. Admin has been notified. (Refresh the page to reset)")
-        st.stop() # Code yahin ruk jayega, aage ka dashboard load hi nahi hoga
+        st.stop() 
         
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
@@ -44,24 +42,22 @@ if not st.session_state['authenticated']:
         if st.button("Unlock Dashboard", use_container_width=True):
             if pin_input == ADMIN_PIN:
                 st.session_state['authenticated'] = True
-                st.rerun() # Page ko naye state ke sath reload karega
+                st.rerun() 
             else:
                 st.session_state['attempts'] += 1
                 st.error("❌ Incorrect PIN!")
                 time.sleep(1)
                 st.rerun()
-    st.stop() # Don't run the rest of the app if not logged in
+    st.stop() # 🛑 YEH LINE BOHOT ZAROORI HAI (Iske bina system background mein load hota rahega)
 
 # ==========================================
 # 💻 MAIN DASHBOARD UI (Only visible if logged in)
 # ==========================================
 
-# --- Custom CSS for Premium Look ---
 st.markdown("""
     <style>
     .school-title { font-size: 38px; font-weight: 900; color: #F59E0B; text-align: center; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0px;}
     .sub-title { font-size: 22px; color: #D1D5DB; text-align: center; margin-bottom: 30px; font-weight: 400;}
-    /* Developer Name tag with cool gradient */
     .developer-box { background: linear-gradient(135deg, #4F46E5 0%, #9333EA 100%); padding: 20px; border-radius: 12px; text-align: center; color: white; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
     .developer-text { font-size: 13px; margin: 0; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px;}
     .developer-name { font-size: 24px; font-weight: 800; margin: 5px 0; color: #FFFFFF;}
@@ -72,8 +68,8 @@ st.markdown("""
 with st.sidebar:
     st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=120) 
     st.markdown("## 🏛️ Administration")
-    st.markdown("**Director:** [Shri.Ashish Kumar Sarkar]") 
-    st.markdown("**Principal:** [Smt.Dharati Tamgire]")
+    st.markdown("**Director:** [DIRECTOR NAME]") 
+    st.markdown("**Principal:** [PRINCIPAL NAME]")
     
     st.markdown("<div class='developer-box'><p class='developer-text'>System Architect</p><p class='developer-name'>Yatharth Deshmukh</p><p class='developer-text'>Bhavan's GVM Alumnus</p></div>", unsafe_allow_html=True)
     
@@ -126,7 +122,7 @@ else:
     with f_col2:
         selected_date = st.date_input("📅 Select Date", value=None)
     with f_col3:
-        status_list = ["All", "ON TIME", "LATE"] # 'LATE MARK!' hata kar strictly LATE kiya for better matching
+        status_list = ["All", "ON TIME", "LATE"] 
         selected_status = st.selectbox("🚦 Filter by Status", status_list)
 
     # Apply Filters
