@@ -87,11 +87,11 @@ if img_file is not None:
                 now_time = now.time()
                 
                 # TIMINGS SETUP
-                morning_start = time(8, 0)   # Morning window khulegi
-                morning_late = time(8, 30)   # 8:30 ke baad LATE mark
-                morning_end = time(9, 30)    # Morning window band
+                morning_start = time(13, 0)   # Morning window khulegi
+                morning_late = time(14, 30)   # 8:30 ke baad LATE mark
+                morning_end = time(15, 30)    # Morning window band
                 
-                evening_start = time(16, 0)  # Evening window khulegi (4:00 PM)
+                evening_start = time(17, 0)  # Evening window khulegi (4:00 PM)
                 evening_end = time(18, 0)    # Evening window band (6:00 PM)
 
                 date_str = now.strftime("%Y-%m-%d")
