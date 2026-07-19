@@ -5,6 +5,7 @@ import os
 from datetime import datetime, time, timedelta, timezone
 import gspread
 
+
 # --- Page Config ---
 st.set_page_config(page_title="Bhavan's GVM - Smart Scanner", page_icon="📷")
 
@@ -13,7 +14,6 @@ st.info("Click on the camera button to scan the face:")
 
 # --- Google Sheets Connection Setup (Anti-Hack Mode) ---
 def connect_to_sheets():
-    import json
     # Streamlit ki tijori se secret key nikal raha hai
     creds_dict = json.loads(st.secrets["GOOGLE_KEY"])
     client = gspread.service_account_from_dict(creds_dict)
@@ -30,7 +30,6 @@ if not os.path.exists(cascade_path):
     urllib.request.urlretrieve('https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml', cascade_path)
 
 face_cascade = cv2.CascadeClassifier(cascade_path)
-
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 
 # Streamlit ko file ka exact rasta (GPS) batane ki ninja technique
@@ -39,17 +38,17 @@ trainer_file = os.path.join(current_folder, 'trainer.yml')
 
 if not os.path.exists(trainer_file):
     st.error("❌ File GitHub par hai, par server usko dhoondh nahi pa raha!")
-    st.stop() # Yeh line aage ka crash (cv2.error) hamesha ke liye rok degi!
+    st.stop() # Yeh line aage ka crash (cv2.error) hamesha ke liye rok degi
 else:
     try:
         recognizer.read(trainer_file)
     except Exception as e:
         st.error(f"❌ File mil gayi, par OpenCV usko padh nahi pa raha (File corrupt ho sakti hai): {e}")
         st.stop()
+
 # --- NAAM PADHNE WALA FUNCTION ---
 def load_names():
     names = {}
-    import os
     if os.path.exists('names_mapping.txt'):
         with open('names_mapping.txt', 'r') as f:
             for line in f:
@@ -61,7 +60,6 @@ def load_names():
 # Jab face match ho, toh naam list se aise uthana:
 names_map = load_names()
   
-
 # --- Camera Input ---
 img_file = st.camera_input("")
 
@@ -83,39 +81,78 @@ if img_file is not None:
             if confidence < 75: 
                 name = names_map.get(id, "Unknown")
                 
-                # --- ADVANCED TIME & LATE MARK LOGIC ---
+                # --- ADVANCED DUAL-WINDOW TIME LOGIC (MORNING & EVENING) ---
                 ist_time = timezone(timedelta(hours=5, minutes=30))
                 now = datetime.now(ist_time)
                 now_time = now.time()
                 
-                # TIMINGS: Aaj ka Test Time (3:00 PM to 5:00 PM)
-                start_time = time(10, 0)   # Window Opens
-                late_time = time(10, 30)   # Late Mark Starts
-                end_time = time(22, 0)     # Window Closes
+                # TIMINGS SETUP
+                morning_start = time(8, 0)   # Morning window khulegi
+                morning_late = time(8, 30)   # 8:30 ke baad LATE mark
+                morning_end = time(9, 30)    # Morning window band
+                
+                evening_start = time(16, 0)  # Evening window khulegi (4:00 PM)
+                evening_end = time(18, 0)    # Evening window band (6:00 PM)
 
-                if start_time <= now_time <= end_time:
-                    if now_time <= late_time:
-                        status = "Present"
-                        st.success(f"✅ FACE MATCHED: {name} (ON TIME!)")
-                        st.balloons()
-                    else:
-                        status = "Late"
-                        st.warning(f"⏰ FACE MATCHED: {name} (LATE MARK!)")
+                date_str = now.strftime("%Y-%m-%d")
+                time_str = now.strftime("%H:%M:%S")
+                day_str = now.strftime("%A")
 
-                    # --- CLOUD MEIN SAVE KARNA (Google Sheets) ---
-                    date_str = now.strftime("%Y-%m-%d")
-                    time_str = now.strftime("%H:%M:%S")
-                    day_str = now.strftime("%A")
-
-                    try:
-                        sheet = connect_to_sheets()
-                        # USER_ENTERED lagane se Google ko lagega kisi insaan ne type kiya hai
-                        sheet.append_row([name, date_str, time_str, day_str, status], value_input_option='USER_ENTERED')
-                        st.success("☁ Data successfully saved to Google Sheets! (Confirmed)")
-                    except Exception as e:
-                        st.error(f"❌ ASLI ERROR: {e}")
-                else:
-                    st.error(f"🔴 Face Matched: {name}. Attendance window is closed. Entry Not Saved!")
+                try:
+                    sheet = connect_to_sheets()
+                    existing_data = sheet.get_all_values()
                     
+                    row_found = False
+                    row_index = -1
+                    
+                    # Check kar rahe hain ki aaj subah ka scan hua hai ya nahi
+                    for i, row in enumerate(existing_data):
+                        if len(row) >= 2 and row[0] == name and row[1] == date_str:
+                            row_found = True
+                            row_index = i + 1 
+                            break
+                            
+                    # ==========================================
+                    # ☀️ SCENARIO 1: MORNING SCAN (8:00 AM to 9:30 AM)
+                    # ==========================================
+                    if morning_start <= now_time <= morning_end:
+                        if row_found:
+                            st.warning(f"⚠️ {name}, your Morning IN attendance is already marked!")
+                        else:
+                            if now_time <= morning_late:
+                                status = "Present"
+                                st.success(f"✅ FACE MATCHED: {name} (ON TIME!)")
+                                st.balloons()
+                            else:
+                                status = "Late"
+                                st.warning(f"⏰ FACE MATCHED: {name} (LATE MARK!)")
+                            
+                            # OUT Time ki jagah "---" daal rahe hain
+                            sheet.append_row([name, date_str, time_str, "---", day_str, status], value_input_option='USER_ENTERED')
+                            st.success("☀️ Morning IN-Time saved successfully.")
+                            
+                    # ==========================================
+                    # 🌙 SCENARIO 2: EVENING SCAN (4:00 PM to 6:00 PM)
+                    # ==========================================
+                    elif evening_start <= now_time <= evening_end:
+                        if not row_found:
+                            st.error(f"🔴 {name}, your Morning scan is missing! Cannot mark OUT time.")
+                        else:
+                            # Check kar rahe hain ki OUT time pehle se toh nahi bhara
+                            if len(existing_data[row_index-1]) >= 4 and existing_data[row_index-1][3] != "---":
+                                st.warning(f"⚠️ {name}, your Evening OUT time is already marked!")
+                            else:
+                                st.success(f"✅ FACE MATCHED: {name} (EVENING OUT)")
+                                sheet.update_cell(row_index, 4, time_str) # 4th Column mein time update
+                                st.success("🌙 Evening OUT-Time updated successfully.")
+                                
+                    # ==========================================
+                    # 🚫 SCENARIO 3: WRONG TIMING (System Closed)
+                    # ==========================================
+                    else:
+                        st.error(f"🔴 Face Matched: {name}. Attendance window is currently CLOSED.")
+                        
+                except Exception as e:
+                    st.error(f"❌ ASLI ERROR: {e}")
             else:
                 st.error("🔴 Unknown Face! Access Denied.")
