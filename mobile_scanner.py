@@ -129,14 +129,14 @@ if img_file is not None:
                             
                             # OUT Time ki jagah "---" daal rahe hain
                             sheet.append_row([name, date_str, time_str, "---", day_str, status], value_input_option='USER_ENTERED')
-                            st.success("☀️ Morning IN-Time saved successfully.")
+                            st.success("☀️ Morning attendance marked successfully.")
                             
                     # ==========================================
                     # 🌙 SCENARIO 2: EVENING SCAN (4:00 PM to 6:00 PM)
                     # ==========================================
                     elif evening_start <= now_time <= evening_end:
                         if not row_found:
-                            st.error(f"🔴 {name}, your Morning scan is missing! Cannot mark OUT time.")
+                            st.error(f"🔴 {name}, your Morning attendance is missing! Cannot mark OUT time.")
                         else:
                             # Check kar rahe hain ki OUT time pehle se toh nahi bhara
                             if len(existing_data[row_index-1]) >= 4 and existing_data[row_index-1][3] != "---":
@@ -144,15 +144,15 @@ if img_file is not None:
                             else:
                                 st.success(f"✅ FACE MATCHED: {name} (EVENING OUT)")
                                 sheet.update_cell(row_index, 4, time_str) # 4th Column mein time update
-                                st.success("🌙 Evening OUT-Time updated successfully.")
+                                st.success("🌙 Evening attendance updated successfully.")
                                 
                     # ==========================================
                     # 🚫 SCENARIO 3: WRONG TIMING (System Closed)
                     # ==========================================
                     else:
-                        st.error(f"🔴 Face Matched: {name}. Attendance window is currently CLOSED.")
+                        st.error(f"🔴 Face Matched: {name}. Attendance window is currently CLOSED please try again at appropriate time")
                         
                 except Exception as e:
-                    st.error(f"❌ ASLI ERROR: {e}")
+                    st.error(f"❌ MAIN ERROR: {e}")
             else:
                 st.error("🔴 Unknown Face! Access Denied.")
