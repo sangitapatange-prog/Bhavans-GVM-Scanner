@@ -4,7 +4,7 @@ import numpy as np
 import os
 from datetime import datetime, time, timedelta, timezone
 import gspread
-
+import json
 
 # --- Page Config ---
 st.set_page_config(page_title="Bhavan's GVM - Smart Scanner", page_icon="📷")
