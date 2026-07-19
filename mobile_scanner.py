@@ -9,7 +9,7 @@ import json
 # --- Page Config ---
 st.set_page_config(page_title="Bhavan's GVM - Smart Scanner", page_icon="📷")
 
-st.markdown("<h2 style='text-align: center; color: #ff4b4b;'>Bhavan's GVM Web Scanner (Cloud)</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: #ff4b4b; font-weight: 900;'>Bhavan's GVM Web Scanner</h2><p style='text-align: center; color: #6B7280; font-size: 18px; margin-top: -15px; font-weight: bold; letter-spacing: 1px;'>Engineered by Yatharth Deshmukh</p>", unsafe_allow_html=True)
 st.info("Click on the camera button to scan the face:")
 
 # --- Google Sheets Connection Setup (Anti-Hack Mode) ---
