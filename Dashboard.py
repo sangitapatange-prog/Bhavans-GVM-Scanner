@@ -23,8 +23,8 @@ if 'attempts' not in st.session_state:
 # --- LOGIN SCREEN ---
 if not st.session_state['authenticated']:
     st.markdown("<br><br><br>", unsafe_allow_html=True)
-    st.markdown("<h1 style='text-align: center; color: #00F0FF; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);'>🏫 Bhavan's GVM Hinganghat</h1>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: #94A3B8;'>Secure System Access</h2>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #202124; font-family: \"Google Sans\", Roboto, Arial;'>🏫 Bhavan's GVM Hinganghat</h1>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #5F6368; font-family: Roboto, Arial; font-weight: 400;'>Enterprise Attendance Portal</h2>", unsafe_allow_html=True)
     
     if st.session_state['attempts'] >= 3:
         st.markdown("<br>", unsafe_allow_html=True)
@@ -34,10 +34,10 @@ if not st.session_state['authenticated']:
         
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-        st.markdown(f"<div style='text-align: center; color: #FF003C; font-weight: bold;'>Attempts remaining: {3 - st.session_state['attempts']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center; color: #D93025; font-weight: bold; font-family: Roboto;'>Attempts remaining: {3 - st.session_state['attempts']}</div>", unsafe_allow_html=True)
         pin_input = st.text_input("Enter Admin PIN", type="password")
         
-        if st.button("Unlock Dashboard", use_container_width=True):
+        if st.button("Authenticate", use_container_width=True):
             if pin_input == ADMIN_PIN:
                 st.session_state['authenticated'] = True
                 st.rerun()
@@ -49,97 +49,98 @@ if not st.session_state['authenticated']:
     st.stop()
 
 # ==========================================
-# 💻 MAIN DASHBOARD UI (DARK COMMAND CENTER)
+# 💻 MAIN DASHBOARD UI (CORPORATE / GOOGLE STYLE)
 # ==========================================
 
 st.markdown("""
     <style>
-    /* Dark Tech Background */
+    /* Google Material Design Background */
     [data-testid="stAppViewContainer"] {
-        background-color: #0A0E17;
-        color: #E2E8F0;
+        background-color: #F8F9FA;
+        font-family: "Google Sans", Roboto, Arial, sans-serif;
     }
     
     [data-testid="stHeader"] {
         background-color: transparent;
     }
     
-    /* Neon Cyber Buttons */
+    /* Corporate Blue Buttons (Google Style) */
     div.stButton > button {
-        background-color: transparent !important;
-        color: #00F0FF !important;
-        border: 2px solid #00F0FF !important;
+        background-color: #1A73E8 !important;
+        color: white !important;
         border-radius: 4px !important;
-        padding: 10px 24px !important;
-        font-weight: 800 !important;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        transition: all 0.3s ease !important;
-        box-shadow: 0 0 10px rgba(0, 240, 255, 0.2) !important;
+        border: none !important;
+        padding: 8px 24px !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.25px !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15) !important;
     }
     div.stButton > button:hover {
-        background-color: #00F0FF !important;
-        color: #0A0E17 !important;
-        box-shadow: 0 0 20px rgba(0, 240, 255, 0.6) !important;
+        background-color: #1557B0 !important;
+        box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15) !important;
     }
     
-    /* Dark Inputs with Neon Borders */
+    /* Clean Inputs */
     .stSelectbox div[data-baseweb="select"], .stTextInput div[data-baseweb="input"], .stDateInput div[data-baseweb="input"] {
-        background-color: #131A2A !important;
-        border: 1px solid #1E293B !important;
-        color: #00F0FF !important;
+        background-color: #FFFFFF !important;
+        border: 1px solid #DADCE0 !important;
+        border-radius: 4px !important;
+        color: #202124 !important;
     }
     
-    /* Glowing Metric Cards */
+    /* Official Metric Cards */
     [data-testid="metric-container"] {
-        background-color: #131A2A;
-        border: 1px solid #38BDF8;
-        border-left: 4px solid #38BDF8;
-        border-radius: 4px;
+        background-color: #FFFFFF;
+        border: 1px solid #DADCE0;
+        border-radius: 8px;
         padding: 20px;
-        box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+        box-shadow: none;
     }
     [data-testid="stMetricValue"] {
-        color: #00F0FF !important;
-        text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+        color: #202124 !important;
+        font-weight: 400 !important;
     }
     
     /* Text Colors */
-    h1, h2, h3 { color: #F8FAFC !important; font-weight: 800 !important; }
-    p, span, label { color: #94A3B8 !important; }
+    h1, h2, h3 { color: #202124 !important; font-weight: 400 !important; }
+    p, span, label { color: #5F6368 !important; }
     
     /* Table Styling */
     [data-testid="stTable"], [data-testid="stDataFrame"] {
-        background-color: #131A2A;
-        border: 1px solid #1E293B;
+        background-color: #FFFFFF;
+        border: 1px solid #DADCE0;
+        border-radius: 8px;
     }
 
     /* Titles & Developer Box */
-    .school-title { font-size: 38px; font-weight: 900; color: #00F0FF; text-align: center; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 12px rgba(0, 240, 255, 0.4); margin-bottom: 0px;}
-    .sub-title { font-size: 20px; color: #94A3B8; text-align: center; margin-bottom: 30px; letter-spacing: 1px;}
-    .developer-box { background: #131A2A; border: 1px solid #B026FF; padding: 20px; border-radius: 4px; text-align: center; box-shadow: 0 0 20px rgba(176, 38, 255, 0.15); margin-top: 20px;}
-    .developer-text { font-size: 12px; margin: 0; opacity: 0.9; text-transform: uppercase; letter-spacing: 2px; color: #94A3B8 !important;}
-    .developer-name { font-size: 24px; font-weight: 900; margin: 5px 0; color: #B026FF !important; text-shadow: 0 0 10px rgba(176, 38, 255, 0.4); text-transform: uppercase;}
+    .school-title { font-size: 32px; font-weight: 400; color: #202124; text-align: center; margin-bottom: 5px; font-family: "Google Sans", Roboto, sans-serif;}
+    .sub-title { font-size: 18px; color: #5F6368; text-align: center; margin-bottom: 30px; font-weight: 400;}
+    
+    /* Official ID Badge Style */
+    .developer-box { background: #FFFFFF; border: 1px solid #DADCE0; border-top: 4px solid #1A73E8; padding: 15px; border-radius: 8px; text-align: center; margin-top: 20px;}
+    .developer-text { font-size: 12px; margin: 0; color: #5F6368 !important; text-transform: uppercase; letter-spacing: 0.5px;}
+    .developer-name { font-size: 20px; font-weight: 500; margin: 5px 0; color: #202124 !important;}
     </style>
 """, unsafe_allow_html=True)
 
 # --- SIDEBAR ---
 with st.sidebar:
-    st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=120) 
-    st.markdown("## 🏛️ COMMAND CENTER")
+    st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=100) 
+    st.markdown("## 🏛️ Administration")
     st.markdown("**Director:** [Shri.Ashish Kumar Sarkar]") 
     st.markdown("**Principal:** [Smt.Dharati Tamgire]")
     
-    st.markdown("<div class='developer-box'><p class='developer-text'>System Architect</p><p class='developer-name'>Yatharth Deshmukh</p><p class='developer-text'>Bhavan's GVM Alumnus</p></div>", unsafe_allow_html=True)
+    st.markdown("<div class='developer-box'><p class='developer-text'>System Architect</p><p class='developer-name'>Yatharth Deshmukh</p><p class='developer-text'>Bhavan's GVM</p></div>", unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("🔒 LOGOUT SYSTEM", use_container_width=True):
+    if st.button("🔒 Secure Logout", use_container_width=True):
         st.session_state['authenticated'] = False
         st.rerun()
 
 # --- MAIN PAGE HEADERS ---
 st.markdown("<div class='school-title'>Bhavan's GVM, Hinganghat</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-title'>SECURE ATTENDANCE MAINFRAME</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-title'>Enterprise Attendance Portal</div>", unsafe_allow_html=True)
 
 # --- SECURE DATA CONNECTION ---
 @st.cache_data(ttl=30) 
@@ -164,46 +165,46 @@ def load_data():
 df = load_data()
 
 if df.empty:
-    st.info("📌 SYSTEM ONLINE. AWAITING DATA STREAMS...")
+    st.info("📌 System is online and waiting for incoming data.")
 else:
     name_col = df.columns[0]
     date_col = [c for c in df.columns if 'date' in str(c).lower()][0]
     status_col = [c for c in df.columns if 'status' in str(c).lower()][0]
 
     # --- LIVE ANALYTICS COUNTERS ---
-    st.markdown("### 📊 SYSTEM ANALYTICS")
+    st.markdown("### 📊 Overview")
     metric_col1, metric_col2, metric_col3 = st.columns(3)
     
     with metric_col1:
-        st.metric(label="TOTAL SCANS", value=len(df)) 
+        st.metric(label="Total Personnel Scanned", value=len(df)) 
         
     with metric_col2:
         present_count = len(df[df[status_col].astype(str).str.contains('Present|ON TIME', case=False, na=False)])
-        st.metric(label="ON TIME", value=present_count)
+        st.metric(label="On Time (Compliant)", value=present_count)
         
     with metric_col3:
         late_count = len(df[df[status_col].astype(str).str.contains('Late', case=False, na=False)])
-        st.metric(label="LATE MARKS", value=late_count)
+        st.metric(label="Late (Flagged)", value=late_count)
 
     st.markdown("---")
 
     # --- SMART FILTERS ---
-    st.markdown("### 🔍 DATA FILTERS")
+    st.markdown("### 🔍 Data Explorer")
     
     f_col1, f_col2, f_col3 = st.columns(3)
     
     with f_col1:
-        teacher_list = ["All Teachers"] + df[name_col].unique().tolist()
-        selected_teacher = st.selectbox("👤 SELECT PERSONNEL", teacher_list)
+        teacher_list = ["All Personnel"] + df[name_col].unique().tolist()
+        selected_teacher = st.selectbox("👤 Select Personnel", teacher_list)
     with f_col2:
-        selected_date = st.date_input("📅 SELECT DATE", value=None)
+        selected_date = st.date_input("📅 Date Range", value=None)
     with f_col3:
         status_list = ["All", "ON TIME", "LATE"]
-        selected_status = st.selectbox("🚦 FILTER STATUS", status_list)
+        selected_status = st.selectbox("🚦 Compliance Status", status_list)
 
     # Apply Filters
     filtered_df = df.copy()
-    if selected_teacher != "All Teachers":
+    if selected_teacher != "All Personnel":
         filtered_df = filtered_df[filtered_df[name_col] == selected_teacher]
     if selected_date is not None:
         filtered_df = filtered_df[filtered_df[date_col].astype(str).str.contains(str(selected_date))]
@@ -214,6 +215,6 @@ else:
     
     # --- LIVE DATA TABLE ---
     if filtered_df.empty:
-        st.warning("⚠️ NO LOGS DETECTED FOR CURRENT FILTER.")
+        st.warning("⚠️ No records found for the selected criteria.")
     else:
         st.dataframe(filtered_df.iloc[::-1], use_container_width=True, hide_index=True, height=400)
