@@ -37,7 +37,7 @@ current_folder = os.path.dirname(os.path.abspath(__file__))
 trainer_file = os.path.join(current_folder, 'trainer.yml')
 
 if not os.path.exists(trainer_file):
-    st.error("❌ "The file is on GitHub, but the server can't find it!")
+    st.error("❌      "The file is on GitHub, but the server can't find it!")
     st.stop() # Yeh line aage ka crash (cv2.error) hamesha ke liye rok degi
 else:
     try:
