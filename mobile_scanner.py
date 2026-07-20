@@ -37,13 +37,13 @@ current_folder = os.path.dirname(os.path.abspath(__file__))
 trainer_file = os.path.join(current_folder, 'trainer.yml')
 
 if not os.path.exists(trainer_file):
-    st.error("❌ File GitHub par hai, par server usko dhoondh nahi pa raha!")
+    st.error("❌ The file is on GitHub, but the server can't find it!")
     st.stop() # Yeh line aage ka crash (cv2.error) hamesha ke liye rok degi
 else:
     try:
         recognizer.read(trainer_file)
     except Exception as e:
-        st.error(f"❌ File mil gayi, par OpenCV usko padh nahi pa raha (File corrupt ho sakti hai): {e}")
+        st.error(f"❌ The file was found, but OpenCV couldn't read it. (The file may be corrupted): {e}")
         st.stop()
 
 # --- NAAM PADHNE WALA FUNCTION ---
@@ -72,7 +72,7 @@ if img_file is not None:
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
 
     if len(faces) == 0:
-        st.warning("No face detected! Thoda paas aakar aur achhi light mein try karein.")
+        st.warning("No face detected!Please move a little closer and try again in better lighting.")
     else:
         for (x, y, w, h) in faces:
             id, confidence = recognizer.predict(gray[y:y+h, x:x+w])
