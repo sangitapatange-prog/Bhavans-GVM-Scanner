@@ -57,12 +57,12 @@ def process_attendance(name, method_used):
     now = datetime.now(ist_time)
     now_time = now.time()
     
-    morning_start = time(13, 0)
-    morning_late = time(14, 30)
-    morning_end = time(15, 30)
+    morning_start = time(17, 0)
+    morning_late = time(17, 30)
+    morning_end = time(17, 37)
     
-    evening_start = time(17, 0)
-    evening_end = time(18, 0)
+    evening_start = time(18, 0)
+    evening_end = time(19, 0)
 
     date_str = now.strftime("%Y-%m-%d")
     time_str = now.strftime("%H:%M:%S")
