@@ -34,8 +34,9 @@ for filename, url in files_to_download.items():
         urllib.request.urlretrieve(url, filepath)
 
 try:
-    detector = cv2.dnn.readNetFromCaffe(f"{models_dir}/deploy.prototxt", f"{models_dir}/res10_300x300_ssd_iter_140000.caffemodel")
-    embedder = cv2.dnn.readNetFromTorch(f"{models_dir}/openface_nn4.small2.v1.t7")
+    # ⚡ UNIVERSAL AI LOADER (Bypasses the attribute error)
+    detector = cv2.dnn.readNet(f"{models_dir}/deploy.prototxt", f"{models_dir}/res10_300x300_ssd_iter_140000.caffemodel")
+    embedder = cv2.dnn.readNet(f"{models_dir}/openface_nn4.small2.v1.t7")
 except Exception as e:
     st.error(f"❌ AI Core Loading Error: {e}")
     st.stop()
