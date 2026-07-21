@@ -1,7 +1,8 @@
 streamlit
-opencv-contrib-python-headless
-numpy
+opencv-python-headless==4.8.0.74
+numpy<2.0.0
 Pillow
+qrcode
 gspread>=6.0.0
 oauth2client
 pandas
