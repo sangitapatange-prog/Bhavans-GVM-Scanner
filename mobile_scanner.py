@@ -137,11 +137,15 @@ if img_file is not None:
                 
                 # Compare 128-D Encodings
                 name = "Unknown"
-                min_dist = 0.6 # Tolerance Threshold
+                min_dist = 0.95 # ⚡ Threshold relaxed for Mobile Cameras
+                actual_dist = 999 
                 
                 if len(known_data["encodings"]) > 0:
                     for j, known_vec in enumerate(known_data["encodings"]):
                         dist = np.linalg.norm(vec - known_vec)
+                        if dist < actual_dist:
+                            actual_dist = dist # Sabse best match ka score save karo
+                            
                         if dist < min_dist:
                             min_dist = dist
                             name = known_data["names"][j]
@@ -149,6 +153,5 @@ if img_file is not None:
                 if name != "Unknown":
                     process_attendance(name, "128-D FACE")
                     face_matched = True
-
-        if not face_matched:
-            st.warning("🔴 No valid Face or QR recognized. Please come closer.")
+                else:
+                    st.info(f"🧐 Face detected, but distance is {actual_dist:.2f} (Needs to be < 0.95)")
