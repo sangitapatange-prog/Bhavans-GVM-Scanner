@@ -7,6 +7,8 @@ import gspread
 import json
 import pickle
 import urllib.request
+from streamlit_geolocation import streamlit_geolocation
+from geopy.distance import geodesic
 
 # --- Page Config ---
 st.set_page_config(page_title="Bhavan's GVM - Smart Scanner", page_icon="📷")
