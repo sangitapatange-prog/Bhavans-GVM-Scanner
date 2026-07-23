@@ -15,7 +15,36 @@ st.set_page_config(page_title="Bhavan's GVM - Smart Scanner", page_icon="📷")
 st.markdown("<h2 style='text-align: center; color: #ff4b4b; font-weight: 900;'>Bhavan's GVM Web Scanner</h2><p style='text-align: center; color: #6B7280; font-size: 18px; margin-top: -15px; font-weight: bold; letter-spacing: 1px;'>Engineered by Yatharth Deshmukh</p>", unsafe_allow_html=True)
 st.info("⚡ 128-D AI + QR DUAL-AUTH ACTIVE: Scan Face or Show QR.")
 
+# ==========================================
+# 📍 GEO-LOCATION SECURITY LOCK (NEW)
+# ==========================================
+st.subheader("📍 Security: Geo-Location Check")
+st.write("Please allow location access to verify you are in the school campus.")
+
+# Ask for Live GPS Location
+location = streamlit_geolocation()
+
+# Set Bhavan's GVM Hinganghat Exact Coordinates
+SCHOOL_COORDS = (20.5598, 78.8412) 
+
+if location['latitude'] is not None and location['longitude'] is not None:
+    user_coords = (location['latitude'], location['longitude'])
+    
+    # Calculate exact distance in meters
+    distance = geodesic(SCHOOL_COORDS, user_coords).meters
+    
+    if distance > 300: # ⚡ 300 meters lockdown radius
+        st.error(f"🚨 ACCESS DENIED: You are {int(distance)} meters away from the school campus!")
+        st.stop() # Yeh line camera ko khulne hi nahi degi!
+    else:
+        st.success(f"✅ Location Verified! You are inside the campus ({int(distance)}m away).")
+else:
+    st.warning("⚠️ Waiting for GPS signal... Please click the 'Allow' button for location on your browser.")
+    st.stop() # Jab tak location nahi milegi, app ruka rahega
+
+# ==========================================
 # --- Google Sheets Setup ---
+# ==========================================
 def connect_to_sheets():
     creds_dict = json.loads(st.secrets["GOOGLE_KEY"])
     client = gspread.service_account_from_dict(creds_dict)
@@ -36,7 +65,7 @@ for filename, url in files_to_download.items():
         urllib.request.urlretrieve(url, filepath)
 
 try:
-    # ⚡ UNIVERSAL AI LOADER (Bypasses the attribute error)
+    # ⚡ UNIVERSAL AI LOADER
     detector = cv2.dnn.readNet(f"{models_dir}/deploy.prototxt", f"{models_dir}/res10_300x300_ssd_iter_140000.caffemodel")
     embedder = cv2.dnn.readNet(f"{models_dir}/openface_nn4.small2.v1.t7")
 except Exception as e:
@@ -102,7 +131,9 @@ def process_attendance(name, method_used):
     except Exception as e:
         st.error(f"❌ MAIN ERROR: {e}")
 
-# --- Dual Scanner Input ---
+# ==========================================
+# 📸 CAMERA & SCANNING MODULE
+# ==========================================
 img_file = st.camera_input("")
 
 if img_file is not None:
@@ -139,14 +170,14 @@ if img_file is not None:
                 
                 # Compare 128-D Encodings
                 name = "Unknown"
-                min_dist = 0.95 # ⚡ Threshold relaxed for Mobile Cameras
+                min_dist = 0.95 # Threshold relaxed for Mobile Cameras
                 actual_dist = 999 
                 
                 if len(known_data["encodings"]) > 0:
                     for j, known_vec in enumerate(known_data["encodings"]):
                         dist = np.linalg.norm(vec - known_vec)
                         if dist < actual_dist:
-                            actual_dist = dist # Sabse best match ka score save karo
+                            actual_dist = dist
                             
                         if dist < min_dist:
                             min_dist = dist
@@ -156,4 +187,7 @@ if img_file is not None:
                     process_attendance(name, "128-D FACE")
                     face_matched = True
                 else:
-                    st.info(f"🧐 Face detected, but distance is {actual_dist:.2f} (Needs to be < 0.95)")
+                    # 🚨 THE INTRUDER ALERT FIX 🚨
+                    st.error(f"🚨 ACCESS DENIED: UNKNOWN PERSON DETECTED!")
+                    st.toast("⚠️ Unregistered face scanned!", icon="🚨")
+                    face_matched = True
