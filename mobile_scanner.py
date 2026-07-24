@@ -33,7 +33,7 @@ if location['latitude'] is not None and location['longitude'] is not None:
     # Calculate exact distance in meters
     distance = geodesic(SCHOOL_COORDS, user_coords).meters
     
-    if distance > 70: # ⚡ 300 meters lockdown radius
+    if distance > 100: # ⚡ 300 meters lockdown radius
         st.error(f"🚨 ACCESS DENIED: You are {int(distance)} meters away from the school campus!")
         st.stop() # Yeh line camera ko khulne hi nahi degi!
     else:
