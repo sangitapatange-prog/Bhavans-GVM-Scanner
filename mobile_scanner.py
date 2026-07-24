@@ -25,7 +25,7 @@ st.write("Please allow location access to verify you are in the school campus.")
 location = streamlit_geolocation()
 
 # Set Bhavan's GVM Hinganghat Exact Coordinates
-SCHOOL_COORDS = (20.5598, 78.8412) 
+SCHOOL_COORDS = (20.545204, 78.841518) 
 
 if location['latitude'] is not None and location['longitude'] is not None:
     user_coords = (location['latitude'], location['longitude'])
